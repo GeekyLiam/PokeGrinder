@@ -1,2 +1,2 @@
 # PokeGrinder
- EXP grinding bot for Pokemon FireRed + mGBA.
+ EXP grinding bot for Pokemon FireRed/LeafGreen + mGBA.
