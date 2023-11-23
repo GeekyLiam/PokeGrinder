@@ -96,7 +96,7 @@ def mgba_running_check():
     print(f"Current window: {title}")
     title_check = title.find("mGBA")
     if title_check == 0:
-        print("mGBA detected! Starting PokeGrinder...")
+        print("mGBA detected! Starting poke-exp-bot...")
         mgba_win_handle = win32gui.FindWindow(None, get_fg_window_title())
         win32gui.MoveWindow(mgba_win_handle, 100, 100, 500, 400, 0) #TODO: Make x/y values modifiable within an ini file.
         time.sleep(1)
@@ -111,10 +111,10 @@ def menu():
     Menu function.
     """
 
-    print("Welcome to PokeGrinder! \nPlease ensure you have followed the instructions as stated in the README file.")
+    print("Welcome to poke-exp-bot! \nPlease ensure you have followed the instructions as stated in the README file.")
     start_loop = True
     while start_loop:
-        start = input("Please enter s to start PokeGrinder or q to quit. \n").upper()
+        start = input("Please enter s to start poke-exp-bot or q to quit. \n").upper()
         if start == "S":
             start_loop = False
             mgba_check_menu_loop = True
