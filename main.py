@@ -7,17 +7,18 @@ import getpixelcolor
 from modules import frlg_pathing
 from modules import ingame_controls as igc
 
-def game_loop_frlg_ip_exp_grind():
+def game_loop_frlg_ip_exp_grind(window_x, window_y):
     pass
 
-def menu_select(menu_option):
+def menu_select(menu_option, window_x, window_y):
     """
     Opens menu in game, and selects given menu option by checking pixel colors.
     Param: menu_option: Which menu option you want to select.
     """
 
 def battle():
-    pass
+    
+    igc.a()
 
 def battle_check(window_x, window_y):
     """
@@ -38,32 +39,74 @@ def battle_check(window_x, window_y):
     else:
         return False
     
+def pp_empty_check(window_x, window_y):
+    """
+    Checks if PP for selected move is empty by checking pixel colors.
+
+    Param:
+        window_x: X postion of mGBA window
+        window_y: Y position of mGBA window
+
+    Returns:
+        If PP empty: True
+        If PP not empty: False
+    """
+
+    pixel_color = getpixelcolor.pixel(window_x + 514, window_y + 433)
+    if pixel_color == (239, 0, 0):
+        return True
+    else:
+        return False
+
 def hp_check():
     pass
 
-def shiny_check():
-    pass
-
-def stuck():
+def battle_menu_select(menu_option, window_x, window_y):
     """
-    Attempts to check if user is stuck, and attempts to correct to allow grinding to continue.
+    Selects battle menu option.
+
+    Param:
+        menu_option: Menu option that needs to be selected
+        window_x: X postion of mGBA window
+        window_y: Y position of mGBA window
     """
 
-    #TODO: 
-    # Make modifiable within an ini file to allow user to choose whether to allow 
-    # stuck() function to attempt to correct or to just quit upon stuck detection.
+    in_menu = True
 
-    # If no battle detected for ~1 min, attempt to unstuck...
-
-    pass
-
-def battle_menu_select():
-    pass
+    while in_menu:
+        if menu_option == "fight":
+            igc.up()
+            igc.left()
+            pixel_color = getpixelcolor.pixel(window_x + 401, window_y + 437)
+            if pixel_color == (41, 49, 49):
+                igc.a()
+                in_menu = False
+        elif menu_option == "bag":
+            igc.up()
+            igc.right()
+            pixel_color = getpixelcolor.pixel(window_x + 569, window_y + 437)
+            if pixel_color == (41, 49, 49):
+                igc.a()
+                in_menu = False
+        elif menu_option == "pokemon":
+            igc.down()
+            igc.left()
+            pixel_color = getpixelcolor.pixel(window_x + 401, window_y + 486)
+            if pixel_color == (41, 49, 49):
+                igc.a()
+                in_menu = False
+        elif menu_option == "run":
+            igc.up()
+            igc.right()
+            pixel_color = getpixelcolor.pixel(window_x + 569, window_y + 486)
+            if pixel_color == (41, 49, 49):
+                igc.a()
+                in_menu = False
 
 def battle_move_menu_select():
     pass
 
-def move_select():
+def user_move_select():
     """
     Allows user to select which move to spam against wild pokemon.
     """
@@ -142,7 +185,6 @@ def menu():
         elif start == "Q":
             exit()
         elif start == "TEST": # Skips mGBA check sequence to allow for faster testing.
-            time.sleep(2.5)
             start_loop = False
         else:
             print("Input not recognized. \n")
@@ -152,13 +194,15 @@ def menu():
 
     print(mgba_info)
 
-    battle = False
-    while not battle:
-        time.sleep(0.5)
-        battle_state = battle_check(mgba_info[1], mgba_info[2])
-        if battle_state:
-            battle = True
-            print("battle")
+    battle_menu_select("fight", mgba_info[1], mgba_info[2])
+
+    # battle = False
+    # while not battle:
+    #     time.sleep(0.5)
+    #     battle_state = battle_check(mgba_info[1], mgba_info[2])
+    #     if battle_state:
+    #         battle = True
+    #         print("battle")
 
 def main():
 

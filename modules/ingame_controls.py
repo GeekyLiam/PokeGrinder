@@ -72,11 +72,9 @@ def run_end():
     keyboard.release("z")
 
 def run_left_right():
-    run_start()
     keyboard.press("left")
     time.sleep(0.75)
     keyboard.release("left")
     keyboard.press("right")
     time.sleep(0.75)
     keyboard.release("right")
-    run_end()
