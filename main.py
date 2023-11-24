@@ -3,21 +3,25 @@ import time
 import win32gui
 import keyboard
 import getpixelcolor
+import os
 
 from modules import frlg_pathing
 from modules import ingame_controls as igc
 
-def frlg_ip_exp_grind_loop(window_x, window_y):
+def frlg_ip_exp_grind_loop(user_move, window_x, window_y):
     
     frlg_pathing.heal_pokemon_ip()
+    print("Pokemon healed!")
     frlg_pathing.ip_to_vr()
 
     pp_ok = True
     while pp_ok:
+        igc.fast_forward_start()
         igc.run_left_right()
         battle_state = battle_check(window_x, window_y)
         if battle_state:
-            battle()
+            igc.fast_forward_end()
+            battle(user_move, window_x, window_y)
 
 def menu_select(menu_option, window_x, window_y):
     """
@@ -29,9 +33,23 @@ def menu_select(menu_option, window_x, window_y):
         window_y: Y position of mGBA window
     """
 
-def battle():
+def battle(user_move, window_x, window_y):
     
-    pass
+    print("Battle started!")
+
+    time.sleep(1)
+    igc.a()
+    time.sleep(2.5)
+
+    battle_state = True
+
+    while battle_state:
+            battle_menu_select("fight", window_x, window_y)
+            move_success = battle_move_menu_select(user_move, window_x, window_y)
+            battle = battle_check(window_x, window_y)
+            if not battle:
+                print("Battle ended!")
+                battle_state = False
 
 def battle_check(window_x, window_y):
     """
@@ -71,9 +89,11 @@ def pp_empty_check(window_x, window_y):
     else:
         return False
 
-def hp_check():
+def hp_low_check():
 
-    pass
+    # TODO: Implement function!!
+
+    return False
 
 def run_away():
 
@@ -156,6 +176,18 @@ def battle_menu_select(menu_option, window_x, window_y):
                 in_menu = False
 
 def battle_move_menu_select(user_move, window_x, window_y):
+    """
+    Selects battle menu option.
+
+    Param:
+        user_move: Move option that needs to be selected
+        window_x: X postion of mGBA window
+        window_y: Y position of mGBA window
+
+    Returns:
+        If move has PP and is selected: True
+        If move doesn't have PP and run away is initiated: False
+    """
 
     in_move_menu = True
 
@@ -170,7 +202,12 @@ def battle_move_menu_select(user_move, window_x, window_y):
                     run_status = run_away()
                     return False
                 igc.a()
+                time.sleep(10)
+                igc.a()
+                time.sleep(1.5)
+                igc.a()
                 in_move_menu = False
+                return True
 
         if user_move == 2:
             igc.up()
@@ -182,28 +219,62 @@ def battle_move_menu_select(user_move, window_x, window_y):
                     run_status = run_away()
                     return False
                 igc.a()
+                time.sleep(10)
+                igc.a()
+                time.sleep(1.5)
+                igc.a()
                 in_move_menu = False
+                return True
 
         if user_move == 3:
             igc.down()
             igc.left()
-            pixel_color = getpixelcolor.pixel(window_x + 258, window_y + 436)
+            pixel_color = getpixelcolor.pixel(window_x + 41, window_y + 486)
             if pixel_color == (41, 49, 49):
                 pp_empty = pp_empty_check(window_x, window_y)
                 if pp_empty:
                     run_status = run_away()
                     return False
                 igc.a()
+                time.sleep(10)
+                igc.a()
+                time.sleep(1.5)
+                igc.a()
                 in_move_menu = False
+                return True
+
+        if user_move == 4:
+            igc.down()
+            igc.right()
+            pixel_color = getpixelcolor.pixel(window_x + 257, window_y + 486)
+            if pixel_color == (41, 49, 49):
+                pp_empty = pp_empty_check(window_x, window_y)
+                if pp_empty:
+                    run_status = run_away()
+                    return False
+                igc.a()
+                time.sleep(10)
+                igc.a()
+                time.sleep(1.5)
+                igc.a()
+                in_move_menu = False
+                return True
 
 def user_move_select():
     """
     Allows user to select which move to spam against wild pokemon.
     """
-    
-    input_check = False
-    while input_check:
-        move_select = input("Enter number for move you wish to spam (1, 2, 3 or 4): \n")
+
+    input_num_check = True
+    while input_num_check:
+        input_check = True
+        while input_check:
+            try:
+                move_select = int(input("Enter number for move you wish to spam (1, 2, 3 or 4): \n"))
+                input_check = False
+            except:
+                print("Invalid input. Try again: ")
+
         if move_select == 1:
             return 1
         elif move_select == 2:
@@ -253,6 +324,8 @@ def mgba_running_check():
     title_check = title.find("mGBA")
     if title_check == 0:
         print("mGBA detected! Starting poke-exp-bot...")
+        time.sleep(1.5)
+        os.system("cls")
         mgba_win_handle = win32gui.FindWindow(None, get_fg_window_title())
         window_pos_info = win32gui.GetWindowRect(mgba_win_handle)
         time.sleep(1)
@@ -276,10 +349,13 @@ def menu():
     while start_loop:
         start = input("Please enter s to start poke-exp-bot or q to quit. \n").upper()
         if start == "S":
+            user_move = user_move_select()
             start_loop = False
             mgba_check_menu_loop = True
             while mgba_check_menu_loop:
                 mgba_info = mgba_running_check()
+                window_x = mgba_info[1]
+                window_y = mgba_info[2]
                 if mgba_info[0] == True:
                     mgba_check_menu_loop = False
                 else: 
@@ -294,17 +370,7 @@ def menu():
 
     # testing below
 
-    print(mgba_info)
-
-    frlg_ip_exp_grind_loop(mgba_info[1], mgba_info[2])
-
-    # battle = False
-    # while not battle:
-    #     time.sleep(0.5)
-    #     battle_state = battle_check(mgba_info[1], mgba_info[2])
-    #     if battle_state:
-    #         battle = True
-    #         print("battle")
+    frlg_ip_exp_grind_loop(user_move, window_x, window_y)
 
 def main():
 

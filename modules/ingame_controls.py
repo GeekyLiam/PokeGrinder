@@ -65,6 +65,12 @@ def r_bumper():
 
 # Other:
 
+def fast_forward_start():
+    keyboard.press("tab")
+
+def fast_forward_end():
+    keyboard.release("tab")
+
 def run_start():
     keyboard.press("z")
 
@@ -72,9 +78,12 @@ def run_end():
     keyboard.release("z")
 
 def run_left_right():
+
+    # Timed with fast_forward in mind:
+
     keyboard.press("left")
-    time.sleep(0.75)
+    time.sleep(0.2)
     keyboard.release("left")
     keyboard.press("right")
-    time.sleep(0.75)
+    time.sleep(0.2)
     keyboard.release("right")
