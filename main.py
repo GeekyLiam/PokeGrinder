@@ -7,18 +7,31 @@ import getpixelcolor
 from modules import frlg_pathing
 from modules import ingame_controls as igc
 
-def game_loop_frlg_ip_exp_grind(window_x, window_y):
-    pass
+def frlg_ip_exp_grind_loop(window_x, window_y):
+    
+    frlg_pathing.heal_pokemon_ip()
+    frlg_pathing.ip_to_vr()
+
+    pp_ok = True
+    while pp_ok:
+        igc.run_left_right()
+        battle_state = battle_check(window_x, window_y)
+        if battle_state:
+            battle()
 
 def menu_select(menu_option, window_x, window_y):
     """
     Opens menu in game, and selects given menu option by checking pixel colors.
-    Param: menu_option: Which menu option you want to select.
+
+    Param:
+        menu_option: Menu option that needs to be selected
+        window_x: X postion of mGBA window
+        window_y: Y position of mGBA window
     """
 
 def battle():
     
-    igc.a()
+    pass
 
 def battle_check(window_x, window_y):
     """
@@ -59,8 +72,47 @@ def pp_empty_check(window_x, window_y):
         return False
 
 def hp_check():
+
     pass
 
+def run_away():
+
+    run_success = False
+    while not run_success:
+
+        igc.b()
+        igc.right()
+        igc.down()
+        igc.a()
+        time.sleep(1.5)
+
+        check = run_check()
+        if run_check:
+            igc.a()
+            return True
+        else:
+            igc.a()
+            time.sleep(10)
+
+def run_check(window_x, window_y):
+    """
+    Checks if running away was successful by checking pixel colors.
+
+    Param:
+        window_x: X postion of mGBA window
+        window_y: Y position of mGBA window
+
+    Returns:
+        If run attempt successful: True
+        If run attempt not successful: False
+    """
+
+    pixel_color = getpixelcolor.pixel(window_x + 328, window_y + 435)
+    if pixel_color == (255, 0, 0):
+        return True
+    else:
+        return False
+    
 def battle_menu_select(menu_option, window_x, window_y):
     """
     Selects battle menu option.
@@ -96,22 +148,72 @@ def battle_menu_select(menu_option, window_x, window_y):
                 igc.a()
                 in_menu = False
         elif menu_option == "run":
-            igc.up()
+            igc.down()
             igc.right()
             pixel_color = getpixelcolor.pixel(window_x + 569, window_y + 486)
             if pixel_color == (41, 49, 49):
                 igc.a()
                 in_menu = False
 
-def battle_move_menu_select():
-    pass
+def battle_move_menu_select(user_move, window_x, window_y):
+
+    in_move_menu = True
+
+    while in_move_menu:
+        if user_move == 1:
+            igc.up()
+            igc.left()
+            pixel_color = getpixelcolor.pixel(window_x + 41, window_y + 436)
+            if pixel_color == (41, 49, 49):
+                pp_empty = pp_empty_check(window_x, window_y)
+                if pp_empty:
+                    run_status = run_away()
+                    return False
+                igc.a()
+                in_move_menu = False
+
+        if user_move == 2:
+            igc.up()
+            igc.right()
+            pixel_color = getpixelcolor.pixel(window_x + 258, window_y + 436)
+            if pixel_color == (41, 49, 49):
+                pp_empty = pp_empty_check(window_x, window_y)
+                if pp_empty:
+                    run_status = run_away()
+                    return False
+                igc.a()
+                in_move_menu = False
+
+        if user_move == 3:
+            igc.down()
+            igc.left()
+            pixel_color = getpixelcolor.pixel(window_x + 258, window_y + 436)
+            if pixel_color == (41, 49, 49):
+                pp_empty = pp_empty_check(window_x, window_y)
+                if pp_empty:
+                    run_status = run_away()
+                    return False
+                igc.a()
+                in_move_menu = False
 
 def user_move_select():
     """
     Allows user to select which move to spam against wild pokemon.
     """
-    #1,2,3,4...
-    pass
+    
+    input_check = False
+    while input_check:
+        move_select = input("Enter number for move you wish to spam (1, 2, 3 or 4): \n")
+        if move_select == 1:
+            return 1
+        elif move_select == 2:
+            return 2
+        elif move_select == 3:
+            return 3
+        elif move_select == 4:
+            return 4
+        else:
+            print("Invalid input. Try again: ")
 
 def get_fg_window_title():
     """
@@ -194,7 +296,7 @@ def menu():
 
     print(mgba_info)
 
-    battle_menu_select("fight", mgba_info[1], mgba_info[2])
+    frlg_ip_exp_grind_loop(mgba_info[1], mgba_info[2])
 
     # battle = False
     # while not battle:
