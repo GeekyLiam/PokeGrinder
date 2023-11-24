@@ -147,6 +147,11 @@ def menu():
         else:
             print("Input not recognized. \n")
 
+
+    # testing below
+
+    print(mgba_info)
+
     battle = False
     while not battle:
         time.sleep(0.5)
@@ -158,7 +163,6 @@ def menu():
 def main():
 
     menu()
-
 
 if __name__ == "__main__":
 
