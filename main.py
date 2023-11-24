@@ -7,12 +7,14 @@ import getpixelcolor
 from modules import frlg_pathing
 from modules import ingame_controls as igc
 
+def game_loop_frlg_ip_exp_grind():
+    pass
+
 def menu_select(menu_option):
     """
     Opens menu in game, and selects given menu option by checking pixel colors.
     Param: menu_option: Which menu option you want to select.
     """
-
 
 def battle():
     pass
@@ -145,17 +147,18 @@ def menu():
         else:
             print("Input not recognized. \n")
 
-    # battle = False
-    # while not battle:
-    #     time.sleep(0.5)
-    #     battle_state = battle_check(mgba_info[1], mgba_info[2])
-    #     if battle_state:
-    #         battle = True
-    #         print("battle")
+    battle = False
+    while not battle:
+        time.sleep(0.5)
+        battle_state = battle_check(mgba_info[1], mgba_info[2])
+        if battle_state:
+            battle = True
+            print("battle")
 
 def main():
 
     menu()
+
 
 if __name__ == "__main__":
 
