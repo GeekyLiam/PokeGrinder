@@ -1,6 +1,8 @@
 import time
 import keyboard
 
+from modules import ingame_controls as igc
+
 #TODO: Make key presses into functions to allow for easier writing of control inputs.
 
 def heal_pokemon_frlg_ip():

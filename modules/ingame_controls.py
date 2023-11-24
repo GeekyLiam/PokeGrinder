@@ -1,44 +1,82 @@
 import time
 import keyboard
 
+# Standard controls:
+
 def up():
-    time.sleep(0.2)
+    time.sleep(0.4)
     keyboard.press("up")
-    time.sleep(0.2)
+    time.sleep(0.1)
     keyboard.release("up")
 
 def down():
-    time.sleep(0.2)
+    time.sleep(0.4)
     keyboard.press("down")
-    time.sleep(0.2)
+    time.sleep(0.1)
     keyboard.release("down")
 
 def left():
-    time.sleep(0.2)
+    time.sleep(0.4)
     keyboard.press("left")
-    time.sleep(0.2)
+    time.sleep(0.1)
     keyboard.release("left")
 
 def right():
-    time.sleep(0.2)
+    time.sleep(0.4)
     keyboard.press("right")
-    time.sleep(0.2)
+    time.sleep(0.1)
     keyboard.release("right")
 
 def a():
-    pass
+    time.sleep(0.4)
+    keyboard.press("x")
+    time.sleep(0.1)
+    keyboard.release("x")
 
 def b():
-    pass
+    time.sleep(0.4)
+    keyboard.press("z")
+    time.sleep(0.1)
+    keyboard.release("z")
 
 def start():
-    pass
+    time.sleep(0.4)
+    keyboard.press("enter")
+    time.sleep(0.1)
+    keyboard.release("enter")
 
 def select():
-    pass
+    time.sleep(0.4)
+    keyboard.press("backspace")
+    time.sleep(0.1)
+    keyboard.release("backspace")
 
 def l_bumper():
-    pass
+    time.sleep(0.4)
+    keyboard.press("a")
+    time.sleep(0.1)
+    keyboard.release("a")
 
 def r_bumper():
-    pass
+    time.sleep(0.4)
+    keyboard.press("s")
+    time.sleep(0.1)
+    keyboard.release("s")
+
+# Other:
+
+def run_start():
+    keyboard.press("z")
+
+def run_end():
+    keyboard.release("z")
+
+def run_left_right():
+    run_start()
+    keyboard.press("left")
+    time.sleep(0.75)
+    keyboard.release("left")
+    keyboard.press("right")
+    time.sleep(0.75)
+    keyboard.release("right")
+    run_end()
